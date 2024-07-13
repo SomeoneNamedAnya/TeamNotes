@@ -17,7 +17,8 @@ const formHandler = async () => {
                 password
             }
         )
-    }));
+    })).json();
+    document.getElementById("result").innerHTML = data.email;
 }
 
 const Entrance = () => {
@@ -31,6 +32,7 @@ const Entrance = () => {
                     <input id = "email" type='email' autoComplete="on" placeholder="Почта" onChange={e => setName(e.target.value)}></input>
                     <input id = "password" type="password" autoComplete="on" placeholder="Пароль" onChange={e => setName(e.target.value)}></input>
                     <button className={style.subButton} onClick={formHandler} type="button">Регистрация</button>
+                    <p id="result">Результат регистрации</p>
                 </form>
             </div>
         </div> 
