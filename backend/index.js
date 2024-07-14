@@ -4,13 +4,23 @@ const cors = require('cors');
 const mysql = require("mysql2");
 const DB_URL = ""
 const app = express();
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 3006;
+const mysql = require('mysql');
+
+const db = mysql.createConnection({
+  user: process.env.DB_USER,
+  host: process.env.DB_HOST,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_NAME,
+  insecureAuth : true
+});
+db.connect();
 
 app.use(express.json());
 app.use(cors());
 
 app.get('/', (req, res) => {
-  res.send('Hello World!')
+  res.redirect('/signUp')
 })
 app.get('/registration', (req, res) => {
     res.send('Hello!---------------------')

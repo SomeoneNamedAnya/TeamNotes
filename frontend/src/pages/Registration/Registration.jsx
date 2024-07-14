@@ -15,14 +15,15 @@ const Registration = () => {
                 name,
                 email,
                 password
+            }
+        )
+    })).json();
+    document.getElementById("result").innerHTML = data.email;
+}
+};
 
-            })
-        })).json();
-
-        console.log(data);
-
-    }
-
+const Entrance = () => {
+    const [n, setName] = useState("");
     return (
         <div>
             <div className={style.form}>
@@ -32,6 +33,7 @@ const Registration = () => {
                     <input type='email' autocomplete="on" placeholder="Почта" onChange={e => setEmail(e.target.value)}></input>
                     <input type="password" autocomplete="on" placeholder="Пароль" onChange={e => setPassword(e.target.value)}></input>
                     <button className={style.subButton} onClick={formHandler} type="button">Регистрация</button>
+                    <p id="result">Результат регистрации</p>
                 </form>
             </div>
         </div> 
