@@ -18,7 +18,6 @@ export const userReducer = (state = defaultState, action) => {
         id: payload.id,
         email: payload.email,
         name: payload.name,
-        surname: payload.surname,
       }
 
     case SET_NOTAUTH:
