@@ -50,31 +50,18 @@ app.post('/login', (req, res) => {
 
      //Обработки// 
 
-    const sql = "INSERT INTO users(idUser, name, email, theme, password) VALUES(?, ?, ?, ?, ?)";
+    const sql = "INSERT INTO users(name, email, theme, password) VALUES(?, ?, ?, ?)";
     let lastNum = null;
-    connection.query("select max(idUser) from users", (err, results, fields) => {
-        lastNum = results[0]["max(idUser)"]; // собственно данные
-       
-        if (lastNum === null) {
-            lastNum = 0;
-        }
-        
-        lastNum += 1;
-        console.log(lastNum);
-        
     
-        console.log(results); // мета-данные полей 
-
-
-         connection.query(sql, lastNum, name, email, 1, password, () => {
+    connection.query(sql, lastNum, name, email, 1, password, () => {
          console.log(name);
          console.log("qwerty");
          console.log(email);
          console.log("qwerty2");
          console.log(password);
          console.log("qwerty3");
-        })
-        const sql2 = "select * from users;"
+    })
+    const sql2 = "select * from users;"
         connection.query(sql, function(err, results, fields) {
             console.log(err);
             console.log(results); // собственно данные
@@ -89,8 +76,6 @@ app.post('/login', (req, res) => {
     
     
     //То, что мы отправляем на клиент 
-    res.status(201).json({email: `Your email is ${email}`});  
-})
 
 
 app.listen(port, () => {
