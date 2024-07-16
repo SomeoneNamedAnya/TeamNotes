@@ -5,7 +5,7 @@ const formHandler = async () => {
     const name = document.getElementById("name").value; 
     const email = document.getElementById("email").value; 
     const password = document.getElementById("password").value;
-    const data = await (await fetch('http://localhost:3006/signUp', {
+    const data = await (await fetch('http://localhost:3006/auth/registration', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json;charset=utf-8'
