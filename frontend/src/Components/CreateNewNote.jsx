@@ -1,6 +1,7 @@
 import style from './note.module.css'
 import { Button, Input } from 'antd';
 import { useState } from 'react';
+
 const CreateNewNote = ({createNoteHandler}) => {
     const [text, setText] = useState('');
     const [name, setName] = useState('');

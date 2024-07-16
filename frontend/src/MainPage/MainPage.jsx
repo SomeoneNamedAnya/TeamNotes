@@ -49,8 +49,9 @@ const MainPage = () => {
         formNotesList(notes.filter((note) => note.id != id));
     }
     const editNoteHandler = (id, text, name) => {
-        notes["id"]["Text"] = text;
-        notes["id"]["Name"] = name;
+        notes.find(note => note.id == id).Text = text;
+        notes.find(note => note.id == id).Name = name;
+        formNotesList([...notes]);
     }
     return <div className="mainPage">
             <NotesList notes={notes} 
