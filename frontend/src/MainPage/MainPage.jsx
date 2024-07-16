@@ -45,8 +45,18 @@ const MainPage = () => {
             formNotesList([...notes, note]);
         }
     }
+    const deleteNoteHandler = (id) => {
+        formNotesList(notes.filter((note) => note.id != id));
+    }
+    const editNoteHandler = (id, text, name) => {
+        notes["id"]["Text"] = text;
+        notes["id"]["Name"] = name;
+    }
     return <div className="mainPage">
-            <NotesList notes={notes} createNoteHandler={createNoteHandler}/>
+            <NotesList notes={notes} 
+            createNoteHandler={createNoteHandler}
+            deleteNoteHandler={deleteNoteHandler}
+            editNoteHandler={editNoteHandler}/>
         </div>   
     };
 
