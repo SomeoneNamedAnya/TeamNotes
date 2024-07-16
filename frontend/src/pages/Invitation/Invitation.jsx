@@ -11,71 +11,9 @@ import {Breadcrumb, Button, Space, Flex, Table, Layout, Menu, theme,Typography }
 const { Header, Footer, Sider, Content } = Layout;
 
 
-const Home = () => {
+const Invitation = () => {
     const navigate = useNavigate();
-    let [dataSource, setdataSource] = useState([
-        {
-          key: '1',
-          name: 'Оригинальное название',
-          author: 'Кто-то оригинальный',
-          description: 'Что то на оригинальном',
-          time: "16.07.2024",
-          add: "?",
     
-        },
-        
-        {
-            key: '2',
-            name: 'Оригинальное название2',
-            author: 'Кто-то оригинальный',
-            description: 'Что то на оригинальном',
-            time: "16.07.2024",
-            add: "?",
-            
-        },
-    ]);
-    const removedataSource = (key) => {
-        
-        dataSource = dataSource.filter((e) => e.key !== key)
-        console.log(dataSource);
-        setdataSource(dataSource);
-    }
-
-    const columns = [
-        {
-            title: 'Название группы',
-            dataIndex: 'name',
-            key: 'name',
-        },
-        {
-            title: 'Создатель группы',
-            dataIndex: 'author',
-            key: 'author',
-            },
-        {
-            title: 'Описание',
-            dataIndex: 'description',
-            key: 'description',
-        },
-        {
-            title: 'Время создания',
-            dataIndex: 'time',
-            key: 'time',
-        },
-        
-        {
-            title: 'Действия',
-            key: 'action',
-            render: (record) => (
-              <Space size="middle">
-                <Button onClick={() => {navigate("/group")}}>Войти</Button>
-                <Button onClick={() => {removedataSource(record.key)}}>Уйти</Button>
-              </Space>
-            ),
-        },
-    ];
-
-
     type MenuItem = Required<MenuProps>['items'][number];
 
     const items: MenuItem[] = [
@@ -149,7 +87,7 @@ const Home = () => {
                     margin: '0 16px',
                     height: "100%",
                 }}>
-                    <Table dataSource={dataSource} columns={columns} />;
+                    
                 </Content>
                 
             </Layout>
@@ -158,4 +96,4 @@ const Home = () => {
        
     )
 };
-export default Home;
+export default Invitation;
