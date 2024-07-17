@@ -11,27 +11,7 @@ const MainPage = () => {
             Author: "Me, of course",
             Text: "pupupupupupup"
         },
-        {
-            id: nanoid(),
-            Name: "test note 1",
-            Date: "15/04/2021",
-            Author: "Me, of course",
-            Text: "pupupupupupup"
-        },
-        {
-            id: nanoid(),
-            Name: "test note 2",
-            Date: "15/04/2021",
-            Author: "Me, of course",
-            Text: "pupupupupupup"
-        },
-        {
-            id: nanoid(),
-            Name: "test note 3",
-            Date: "15/04/2021",
-            Author: "Me, of course",
-            Text: "pupupupupupup"
-        },
+        
     ]);
     const createNoteHandler = (text, name) => {
         if (name != '' || text != '') {
