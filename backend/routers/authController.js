@@ -64,6 +64,13 @@ class authController {
     async notes(req, res) {
         res.status(201).json("here are the notes");
     }
+
+    async createGroup(req, res) {
+        const id = req.user._id;
+        const name = req.body.name;
+        db.query("INSERT INTO teamNotesDB.groups (adminId, groupName) VALUES (?, ?)", [id, name]);
+        res.status(201).json("insert successful");
+    }
 }
 
 module.exports = new authController();
