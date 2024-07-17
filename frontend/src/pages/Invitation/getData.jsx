@@ -1,7 +1,7 @@
 import {useNavigate} from "react-router-dom";
 import React, { useState, useEffect } from 'react';
 
-const getData = () => {
+const GetData = () => {
     const [status, setStatus] = useState();
     const [data, setData] = useState();
     async function sendRequest() {
@@ -14,11 +14,12 @@ const getData = () => {
         });
 
         setStatus(response.status);
-        setData(response.data)
+        setData(response.dataInv)
     }
     sendRequest();
     console.log(status);
     console.log(data);
-    
+   // return <div>haha</div>
 }
-export default getData
+
+export default GetData

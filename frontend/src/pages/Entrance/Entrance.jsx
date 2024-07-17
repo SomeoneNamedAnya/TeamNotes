@@ -1,6 +1,7 @@
 import {useState } from "react";
 import {useNavigate} from "react-router-dom";
 import style from "./entrance.module.css"
+import Login from "./Auth";
 
 import {Form, Button, Flex, Input, Layout, theme, Breadcrumb } from 'antd';
 
@@ -17,8 +18,8 @@ const Entrance = () => {
                     {title: <a href="/registration">Регистрация</a>}]
 
 ///////////////////////funcPost/////////////////////////////////
-    const login = () => {
-
+    const login = async () => {
+        Login(email, password)
         navigate('/home')
     }
 //////////////////////////////////////////////////////// 

@@ -1,6 +1,6 @@
 const express = require('express');
 require('dotenv').config();
-const mysql = require('mysql');
+const mysql = require('mysql2');
 const bcrypt = require('bcryptjs');
 const jswt = require('jsonwebtoken');
 
@@ -8,9 +8,9 @@ const generateAccessToken = (_id) => jswt.sign({_id}, process.env.SECRET)
 
 
 const db = mysql.createConnection({
-    user: process.env.DB_USER,
+    user: "root",
     host: process.env.DB_HOST,
-    password: process.env.DB_PASSWORD,
+    password: "12345",
     database: process.env.DB_NAME,
     insecureAuth : true
   });
@@ -38,14 +38,16 @@ class authController {
     }
 
     async login(req, res) {
-        const email  = req.body["email"]; //То, что прилетает с клиента
-        const name  = req.body.name;
+        console.log("qwdqdqwd")
+
+        const email  = req.body.email; //То, что прилетает с клиента
         const password = req.body.password;
+        console.log(email);
         //Обработки//
-        db.query("SELECT idUser, name, password FROM users WHERE email = ?",
+        db.query("SELECT idUser, name, password FROM teamnotesdb.users WHERE email = ?",
             [email], (err, result) => {
             if (!err && result && result.length) {
-                if (name == result[0].name && bcrypt.compareSync(password, result[0].password)) {
+                if (email == result[0].email && bcrypt.compareSync(password, result[0].password)) {
                     const _id = result[0].idUser;
                     const token = generateAccessToken(_id);
                     return res.json(token);
@@ -69,13 +71,43 @@ class authController {
         const id = req.user._id;
         const name = req.body.name;
         db.query("INSERT INTO teamNotesDB.groups (adminId, groupName) VALUES (?, ?)", [id, name]);
+        db.query("SELECT LAST_INSERT_ID() as groupId", (err, result) => {
+            db.query("INSERT INTO teamNotesDB.memberships (groupId, userId) VALUES (?, ?)", [result[0].groupId, id]);
+        });
         res.status(201).json("insert successful");
     }
 
     async getInvitation(req, res) {
         const id = req.user._id;
-        db.query("INSERT INTO teamNotesDB.groups (adminId, groupName) VALUES (?, ?)", [id, name]);
+        sqlReq = "SELECT teamnotesdb.users.email, teamnotesdb.groups.groupName FROM \
+        teamnotesdb.invitations join teamnotesdb.groups on teamnotesdb.invitations.groupId = teamnotesdb.groups.idGroup \
+        join teamnotesdb.users on teamnotesdb.groups.adminId = teamnotesdb.users.idUser where teamnotesdb.invitations.userId = 3;"
+        idGroup = db.query(sqlReq, [id], (err, result) => {
+            console.log(result)
+            res.dataInv.json(result)
+        });
         res.status(201).json("insert successful");
+    }
+
+    async isUserAdminOfGroup(userId, groupId) {
+        db.query("SELECT idGroup FROM teamNotesDB.groups INNER JOIN users ON teamNotesDB.groups.idGroup=users.idUser;", (err, result) => {
+            if (result) return true;
+        })
+        return false;
+    }
+
+    async addUserToGroup(req, res) {
+        const adminId = req.user._id;
+        const email = req.body.email;
+        const groupId = req.body.groupId;
+        const isAdmin = isUserAdminOfGroup(adminId, groupId);
+        console.log(isAdmin);
+        let userId;
+        db.query("SELECT idUser from teamNotesDB.users WHERE email = ?", [email], (err, result) => {
+            userId = result[0].idUser;
+        });
+        db.query("INSERT INTO teamNotesDB.memberships (groupId, userId) VALUES (?, ?)", [groupId, userId]);
+        res.status(201).json("adding successful")
     }
 }
 

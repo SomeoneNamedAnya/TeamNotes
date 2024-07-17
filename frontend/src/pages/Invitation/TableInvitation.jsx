@@ -1,7 +1,7 @@
 import {useNavigate} from "react-router-dom";
 import React, { useEffect, useState } from 'react';
 import {Button, Space, Table} from 'antd';
-import getData from "./getData";
+// import {GetData} from "./GetData.jsx";
 
 const TableInvitation = () => {
     const navigate = useNavigate();
