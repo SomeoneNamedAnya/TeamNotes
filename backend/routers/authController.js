@@ -69,6 +69,9 @@ class authController {
         const id = req.user._id;
         const name = req.body.name;
         db.query("INSERT INTO teamNotesDB.groups (adminId, groupName) VALUES (?, ?)", [id, name]);
+        db.query("SELECT LAST_INSERT_ID() as groupId", (err, result) => {
+            db.query("INSERT INTO teamNotesDB.memberships (groupId, userId) VALUES (?, ?)", [result[0].groupId, id]);
+        });
         res.status(201).json("insert successful");
     }
 }
