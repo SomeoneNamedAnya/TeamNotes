@@ -1,11 +1,9 @@
 const express = require('express');
 require('dotenv').config();
 const cors = require('cors');
-const mysql = require("mysql2");
-const DB_URL = ""
 const app = express();
 const port = process.env.PORT || 3006;
-const mysql = require('mysql');
+const mysql = require('mysql2');
 
 const db = mysql.createConnection({
   user: process.env.DB_USER,
@@ -14,79 +12,43 @@ const db = mysql.createConnection({
   database: process.env.DB_NAME,
   insecureAuth : true
 });
-db.connect();
-
-app.use(express.json());
-app.use(cors());
-
-app.get('/', (req, res) => {
-  res.redirect('/signUp')
-})
-app.get('/registration', (req, res) => {
-    res.send('Hello!---------------------')
-  })
-
-const connection = mysql.createConnection({
-    host: "localhost",
-    user: "root",
-    database: "teamnotesdb",
-    password: "12345"
-});
-
-connection.connect(function(err){
+db.connect(function(err){
     if (err) {
         return console.error("Ошибка: " + err.message);
     }
     else{
         console.log("Подключение к серверу MySQL успешно установлено");
     }
-    });
-async function startApp() {
-    try {
-        
+});
 
-    } catch(error) {
-        console.log(error);
-    }
-}
-
-
+app.use(express.json());
+app.use(cors());
+     
 app.post('/login', (req, res) => {
-
-    //Получение данных от клиента
-    const { email } = req.body;
-    const { name } = req.body;
-    const { password } = req.body;
-
-     //Обработки// 
-
-    const sql = "INSERT INTO users(name, email, theme, password) VALUES(?, ?, ?, ?)";
-    let lastNum = null;
-    
-    connection.query(sql, lastNum, name, email, 1, password, () => {
-         console.log(name);
-         console.log("qwerty");
-         console.log(email);
-         console.log("qwerty2");
-         console.log(password);
-         console.log("qwerty3");
-    })
-    const sql2 = "select * from users;"
-        connection.query(sql, function(err, results, fields) {
-            console.log(err);
-            console.log(results); // собственно данные
-            console.log(fields); // мета-данные полей 
-        });
-    })
-    
-    
+    const email  = req.body["email"]; //То, что прилетает с клиента
+    const name  = req.body.name;
+    const password = req.body.password;
+    // console.log(name);
+    // console.log(email);
+    // console.log(password);
+    //Обработки//
+    db.query("SELECT * FROM users WHERE email = ?",
+      [email], (err, result) => {
+      // console.log(err);
+      // console.log(result);
+      if (!err && result && !result.length) {
+        db.query("INSERT INTO users (name, email, password) VALUES (?, ?, ?)", [name, email, password]);
+        res.status(201).json({email: `Вы успешно зарегистрировались под почтой ${email}`});
+      }
+      else if (result && result.length) {
+        res.status(201).json({email: `Пользователь с почтой ${email} уже зарегистрирован`});  //То, что мы отправляем на клиент
+      }
+      else {
+        res.status(400).json({email: `При регистрации произошла ошибка ${err}`});
+      }
+    });
+})
  
-    
-
-    
-    
-    //То, что мы отправляем на клиент 
-
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
