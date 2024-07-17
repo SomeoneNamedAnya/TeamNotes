@@ -1,9 +1,8 @@
 import {useNavigate} from "react-router-dom";
 import React, { useState} from 'react';
-import "./tablegroup.css"
 import {Button, Space, Table, } from 'antd';
 
-const TableGroup = () => {
+const TableGroup = ({groups, removedataSource}) => {
 
     const navigate = useNavigate();
 
@@ -36,40 +35,10 @@ const TableGroup = () => {
         },
     ];
 
-    let [dataSource, setdataSource] = useState([
-        {
-          key: '1',
-          name: 'Оригинальное название',
-          author: 'Кто-то оригинальный',
-          time: "16.07.2024",
-          add: "?",
-    
-        },
-        
-        {
-            key: '2',
-            name: 'Оригинальное название2',
-            author: 'Кто-то оригинальный',
-            time: "16.07.2024",
-            add: "?",
-            
-        },
-    ]);
-
-///////////////////////////////funcPost///////////////////////////////////
-    // Удаление группы
-    const removedataSource = (key) => {
-        
-        dataSource = dataSource.filter((e) => e.key !== key)
-        console.log(dataSource);
-        setdataSource(dataSource);
-    }
-//////////////////////////////////////////////////////////////////
    
     return (
         
-        <Table dataSource={dataSource} columns={columns} />
-        
+        <Table dataSource={groups} columns={columns} />
     )
 }
 

@@ -3,6 +3,7 @@ import "./home.css"
 import React, { useState, useEffect } from 'react';
 import {Input, Form, Modal, Flex, Layout, Menu, theme} from 'antd';
 import TableGroup from "./TableGroup";
+import {nanoid} from 'nanoid';
 import {
     TeamOutlined,
     MailOutlined,
@@ -63,14 +64,48 @@ const Home = () => {
         setIsModalOpen(false);
     };
 
-//////////////////////funcPost///////////////////////////////
+
+    let [groups, setdataSource] = useState([
+        {
+        key: '1',
+        name: 'Оригинальное название',
+        author: 'Кто-то оригинальный',
+        time: "16.07.2024",
+        add: "?",
+
+        },
+        
+        {
+            key: '2',
+            name: 'Оригинальное название2',
+            author: 'Кто-то оригинальный',
+            time: "16.07.2024",
+            add: "?",
+            
+        },
+    ]);
+
+    let group =         {
+        key: nanoid(),
+        name: title,
+        author: 'Кто-то оригинальный',
+        time: "16.07.2024",
+        add: "?",
+        
+    }
 
     // Создание группы, имя группы в переменной title
     const handleOk = () => {
-        
         setIsModalOpen(false);
+        setdataSource([...groups, group]);
     };
-/////////////////////////////////////////////////////  
+
+    // Удаление группы
+    const removedataSource = (key) => {
+    
+        groups = groups.filter((e) => e.key !== key)
+        setdataSource(groups);
+    }
     
     return (
       
@@ -112,7 +147,7 @@ const Home = () => {
                     height: "100%",
                 }}>
                     <div style={{margin:"10px 0 0 0"}}>
-                        <TableGroup />
+                        <TableGroup groups={groups} removedataSource={removedataSource}/>
                     </div>
                     
                 </Content>
