@@ -48,7 +48,7 @@ class authController {
                 if (name == result[0].name && bcrypt.compareSync(password, result[0].password)) {
                     const _id = result[0].idUser;
                     const token = generateAccessToken(_id);
-                    res.json({token});
+                    return res.json(token);
                 }
                 else res.status(201).json("Вы ввели некорректные данные");
             }
@@ -61,13 +61,8 @@ class authController {
         });
     }
 
-    async getUsers(req, res) {
-        try {
-            res.json("server works")
-        }
-        catch (error) {
-            console.log(`getUsers error ${error}`)
-        }
+    async notes(req, res) {
+        res.status(201).json("here are the notes");
     }
 }
 
