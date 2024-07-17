@@ -1,15 +1,16 @@
 import Note from "./Note.jsx"
-import style from "./notesList.module.css"
+import CreateNewNote from "./CreateNewNote.jsx";
+import { Flex } from "antd";
 
-const NotesList = () => {
-    return <div className={style.notesList}>
-        <Note Name="haha" Text="pupupupupuppupu" Author="Me, of course"/>
-        <Note Name="haha" Text="pupupupupuppupu" Author="Me, of course"/>
-        <Note Name="haha" Text="pupupupupuppupu" Author="Me, of course"/>
-        <Note Name="haha" Text="pupupupupuppupu" Author="Me, of course"/>
-        <Note Name="haha" Text="pupupupupuppupu" Author="Me, of course"/>
-        <Note Name="haha" Text="pupupupupuppupu" Author="Me, of course"/>
-    </div>   
+const NotesList = ({notes, createNoteHandler, deleteNoteHandler, editNoteHandler}) => {
+    console.log(notes[1].Name);
+    return <Flex wrap={'wrap'}>
+        <CreateNewNote createNoteHandler={createNoteHandler}></CreateNewNote>
+        {notes.map((note)=><Note Name={note.Name}
+         Author={note.Author} Text={note.Text}
+         Date={note.Date} id={note.id} deleteNoteHandler={deleteNoteHandler}
+         editNoteHandler={editNoteHandler}/>)}
+    </Flex>   
 };
 
 export default NotesList;

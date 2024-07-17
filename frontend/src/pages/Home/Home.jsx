@@ -1,5 +1,7 @@
 import {Link, useNavigate} from "react-router-dom";
 import React, { useState, useEffect } from 'react';
+import {Breadcrumb, Button, Space, Flex, Table, Layout, Menu, theme,Typography } from 'antd';
+import TableGroup from "./TableGroup";
 import type { MenuProps } from 'antd';
 import {
     TeamOutlined,
@@ -7,75 +9,13 @@ import {
     HomeOutlined,
     QuestionCircleOutlined
   } from '@ant-design/icons';
-import {Breadcrumb, Button, Space, Flex, Table, Layout, Menu, theme,Typography } from 'antd';
+
 const { Header, Footer, Sider, Content } = Layout;
 
 
 const Home = () => {
     const navigate = useNavigate();
-    let [dataSource, setdataSource] = useState([
-        {
-          key: '1',
-          name: 'Оригинальное название',
-          author: 'Кто-то оригинальный',
-          description: 'Что то на оригинальном',
-          time: "16.07.2024",
-          add: "?",
     
-        },
-        
-        {
-            key: '2',
-            name: 'Оригинальное название2',
-            author: 'Кто-то оригинальный',
-            description: 'Что то на оригинальном',
-            time: "16.07.2024",
-            add: "?",
-            
-        },
-    ]);
-    const removedataSource = (key) => {
-        
-        dataSource = dataSource.filter((e) => e.key !== key)
-        console.log(dataSource);
-        setdataSource(dataSource);
-    }
-
-    const columns = [
-        {
-            title: 'Название группы',
-            dataIndex: 'name',
-            key: 'name',
-        },
-        {
-            title: 'Создатель группы',
-            dataIndex: 'author',
-            key: 'author',
-            },
-        {
-            title: 'Описание',
-            dataIndex: 'description',
-            key: 'description',
-        },
-        {
-            title: 'Время создания',
-            dataIndex: 'time',
-            key: 'time',
-        },
-        
-        {
-            title: 'Действия',
-            key: 'action',
-            render: (record) => (
-              <Space size="middle">
-                <Button onClick={() => {navigate("/group")}}>Войти</Button>
-                <Button onClick={() => {removedataSource(record.key)}}>Уйти</Button>
-              </Space>
-            ),
-        },
-    ];
-
-
     type MenuItem = Required<MenuProps>['items'][number];
 
     const items: MenuItem[] = [
@@ -84,11 +24,7 @@ const Home = () => {
         { key: '3',  icon:<QuestionCircleOutlined />, label: 'О приложении',  onClick:() => {navigate("/about")}},
         { key: '4',  icon:<HomeOutlined />, label: 'Выход',  onClick:() => {navigate("/entrance")}},
     ];
-
     const [collapsed, setCollapsed] = useState(false);
-
-    let innerTextName;
-    let innerTextEmail;
 
     useEffect(() => {
         
@@ -104,6 +40,13 @@ const Home = () => {
         document.getElementById("userEmail").innerHTML = innerTextEmail;
 
       });
+  
+    const optionsGroup = [{title: <a href="/group">Заметки</a>,},
+        {title: <a href="/participants">Участники</a>,}]
+    
+    let innerTextName;
+    let innerTextEmail;
+    
     const {
         token: { colorBgContainer, borderRadiusLG },
     } = theme.useToken();    
@@ -115,7 +58,6 @@ const Home = () => {
           }}>
             
             <Sider collapsible collapsed={collapsed} onCollapse={(value) => setCollapsed(value)}>
-                
                 <div style={{margin:"10px 0 10px 10px"}}>
                     <div id="userName" style={{color:"white", fontSize: "25px", display:Flex}}>
                         {innerTextName}
@@ -126,21 +68,20 @@ const Home = () => {
                 </div>
         
                 <Menu theme="dark" defaultSelectedKeys={['1']} mode="inline" items={items} />
-                
+            
             </Sider>
 
-            <Layout>
+            <Layout style={{backgroundColor: "#FFF0F0"}}>
 
                 <Header style={{
                     display:Flex,
                     textAlign: "center",
                     justify_content: "center",
                     alignContent:"center",
-                    margin: '0 16px',
                     padding: 0,
                     background: colorBgContainer,
-                    fontSize: "50px",
                     backgroundColor: '#944E63',
+                    fontSize: "35px",
                 }}>
                     Мои группы
                 </Header>
@@ -149,7 +90,10 @@ const Home = () => {
                     margin: '0 16px',
                     height: "100%",
                 }}>
-                    <Table dataSource={dataSource} columns={columns} />;
+                    <div style={{margin:"10px 0 0 0"}}>
+                        <TableGroup />
+                    </div>
+                    
                 </Content>
                 
             </Layout>

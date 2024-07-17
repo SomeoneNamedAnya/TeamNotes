@@ -1,18 +1,23 @@
 import {Link, useNavigate} from "react-router-dom";
 import React, { useState, useEffect } from 'react';
+import MainPage from "../../MainPage/MainPage.jsx"
+import TableWaiting from "./TableWaiting.jsx"
+import Icon from '@ant-design/icons';
+import "./participants.css"
 import type { MenuProps } from 'antd';
-import TableInvitation from "./TableInvitation";
-
 import {
     TeamOutlined,
     MailOutlined,
     HomeOutlined,
-    QuestionCircleOutlined
+    QuestionCircleOutlined,
+    PlusOutlined
   } from '@ant-design/icons';
-import {Breadcrumb, Button, Space, Flex, Table, Layout, Menu, theme,Typography } from 'antd';
+import {Breadcrumb, Modal, Form, Input, Button, Space, Flex, Table, Layout, Menu, theme,Typography } from 'antd';
+import { useForm } from "antd/es/form/Form.js";
 const { Header, Footer, Sider, Content } = Layout;
 
-const Invitation = () => {
+
+const Wating = () => {
     const navigate = useNavigate();
     
     type MenuItem = Required<MenuProps>['items'][number];
@@ -24,6 +29,8 @@ const Invitation = () => {
         { key: '4',  icon:<HomeOutlined />, label: 'Выход',  onClick:() => {navigate("/entrance")}},
     ];
     const [collapsed, setCollapsed] = useState(false);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const {inv, submitInv} = useForm();
 
     useEffect(() => {
         
@@ -41,18 +48,49 @@ const Invitation = () => {
       });
   
     let innerTextName;
-    let innerTextEmail;
-    
+    let innerTextEmail; 
+    const initialStateEmail = { email: ""};
+    const [email, setEmail] = useState()
+    const [formStatus, setFormStatus] = useState(initialStateEmail)
     const {
         token: { colorBgContainer, borderRadiusLG },
-    } = theme.useToken();     
+    } = theme.useToken();    
     
+    const optionsGroup = [{title: <a href="/group">Заметки</a>,},
+                          {title: <a href="/participants">Участники</a>,},
+                          {title: <a href="/wating">Приглашения</a>,}]
+    
+    const showModal = () => {
+        setIsModalOpen(true);
+    };
+    
+    const validateMessages = {
+        required: '${label} is required!',
+        types: {
+          email: '${label} is not a valid email!',
+        },
+      };
+    const onFinish = (values) => {
+        setEmail(initialStateEmail);
+        console.log(email);
+    };
+   
+    const handleOk = () => {
+        //email.email = "";
+        console.log(email);
+        setIsModalOpen(false);
+    };
+    const handleCancel = () => {
+        setEmail(initialStateEmail);
+        console.log(email);
+        setIsModalOpen(false);
+    };
     return (
       
         <Layout style={{
             minHeight: '100vh',
           }}>
-            
+
             <Sider collapsible collapsed={collapsed} onCollapse={(value) => setCollapsed(value)}>
                 <div style={{margin:"10px 0 10px 10px"}}>
                     <div id="userName" style={{color:"white", fontSize: "25px", display:Flex}}>
@@ -66,7 +104,6 @@ const Invitation = () => {
                 <Menu theme="dark" defaultSelectedKeys={['1']} mode="inline" items={items} />
             
             </Sider>
-
             <Layout style={{backgroundColor: "#FFF0F0"}}>
 
                 <Header style={{
@@ -76,25 +113,33 @@ const Invitation = () => {
                     alignContent:"center",
                     padding: 0,
                     background: colorBgContainer,
-                    fontSize: "35px",
+                    fontSize: "50px",
                     backgroundColor: '#944E63',
+                    fontSize: "35px",
+                    color: "black"
+                    
                 }}>
-                    Приглашения
+                    Участники конкретной группы
                 </Header>
-
+                <Breadcrumb style={{
+                    margin: '10px 30px',
+                }} items={optionsGroup} />
                 <Content style={{
                     margin: '0 16px',
                     height: "100%",
+                    
                 }}>
-                    <div style={{margin:"10px 0 0 0"}}>
-                        <TableInvitation />
-                    </div>
-                </Content>
                 
+                <TableWaiting />  
+                
+                       
+                </Content>
+
+            
             </Layout>
 
         </Layout>
        
     )
 };
-export default Invitation;
+export default Wating;

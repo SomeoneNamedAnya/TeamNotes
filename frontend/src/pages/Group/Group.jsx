@@ -1,5 +1,6 @@
 import {Link, useNavigate} from "react-router-dom";
 import React, { useState, useEffect } from 'react';
+import MainPage from "../../MainPage/MainPage.jsx";
 import type { MenuProps } from 'antd';
 import {
     TeamOutlined,
@@ -8,6 +9,7 @@ import {
     QuestionCircleOutlined
   } from '@ant-design/icons';
 import {Breadcrumb, Button, Space, Flex, Table, Layout, Menu, theme,Typography } from 'antd';
+
 const { Header, Footer, Sider, Content } = Layout;
 
 
@@ -22,11 +24,7 @@ const Group = () => {
         { key: '3',  icon:<QuestionCircleOutlined />, label: 'О приложении',  onClick:() => {navigate("/about")}},
         { key: '4',  icon:<HomeOutlined />, label: 'Выход',  onClick:() => {navigate("/entrance")}},
     ];
-
     const [collapsed, setCollapsed] = useState(false);
-
-    let innerTextName;
-    let innerTextEmail;
 
     useEffect(() => {
         
@@ -42,18 +40,24 @@ const Group = () => {
         document.getElementById("userEmail").innerHTML = innerTextEmail;
 
       });
+
     const {
         token: { colorBgContainer, borderRadiusLG },
-    } = theme.useToken();    
+    } = theme.useToken();  
+    const optionsGroup = [{title: <a href="/group">Заметки</a>,},
+        {title: <a href="/participants">Участники</a>,},
+        {title: <a href="/wating">Приглашения</a>,}]
     
+    let innerTextName;
+    let innerTextEmail;
+      
+
     return (
       
         <Layout style={{
             minHeight: '100vh',
           }}>
-            
             <Sider collapsible collapsed={collapsed} onCollapse={(value) => setCollapsed(value)}>
-                
                 <div style={{margin:"10px 0 10px 10px"}}>
                     <div id="userName" style={{color:"white", fontSize: "25px", display:Flex}}>
                         {innerTextName}
@@ -64,29 +68,31 @@ const Group = () => {
                 </div>
         
                 <Menu theme="dark" defaultSelectedKeys={['1']} mode="inline" items={items} />
-                
+            
             </Sider>
-
-            <Layout>
+            <Layout style={{backgroundColor: "#FFF0F0"}}>
 
                 <Header style={{
                     display:Flex,
                     textAlign: "center",
                     justify_content: "center",
                     alignContent:"center",
-                    margin: '0 16px',
                     padding: 0,
                     background: colorBgContainer,
                     fontSize: "50px",
                     backgroundColor: '#944E63',
+                    fontSize: "35px",
                 }}>
-                    Мои группы
+                    Конкретная группа
                 </Header>
-
+                <Breadcrumb style={{
+                    margin: '10px 30px',
+                }} items={optionsGroup} />
                 <Content style={{
                     margin: '0 16px',
                     height: "100%",
                 }}>
+                    <MainPage />
                     
                 </Content>
                 

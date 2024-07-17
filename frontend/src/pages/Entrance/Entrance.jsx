@@ -14,10 +14,10 @@ const Entrance = () => {
     const isAuth = useSelector(state => state.user.isAuth)
     const dispatch = useDispatch()
     useEffect(() => {
-        console.log("qqqqqqqq");
+       
         if (cons === "1") {
-            console.log("aaaaaaaaaaaaa");
-            navigate(<Home />);
+           
+            navigate("/home");
         }
       });
 

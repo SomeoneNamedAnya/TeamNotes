@@ -22,11 +22,7 @@ const Group = () => {
         { key: '3',  icon:<QuestionCircleOutlined />, label: 'О приложении',  onClick:() => {navigate("/about")}},
         { key: '4',  icon:<HomeOutlined />, label: 'Выход',  onClick:() => {navigate("/entrance")}},
     ];
-
     const [collapsed, setCollapsed] = useState(false);
-
-    let innerTextName;
-    let innerTextEmail;
 
     useEffect(() => {
         
@@ -42,9 +38,13 @@ const Group = () => {
         document.getElementById("userEmail").innerHTML = innerTextEmail;
 
       });
+  
+    let innerTextName;
+    let innerTextEmail;
+    
     const {
         token: { colorBgContainer, borderRadiusLG },
-    } = theme.useToken();    
+    } = theme.useToken();   
     
     return (
       
@@ -53,7 +53,6 @@ const Group = () => {
           }}>
             
             <Sider collapsible collapsed={collapsed} onCollapse={(value) => setCollapsed(value)}>
-                
                 <div style={{margin:"10px 0 10px 10px"}}>
                     <div id="userName" style={{color:"white", fontSize: "25px", display:Flex}}>
                         {innerTextName}
@@ -64,17 +63,16 @@ const Group = () => {
                 </div>
         
                 <Menu theme="dark" defaultSelectedKeys={['1']} mode="inline" items={items} />
-                
+            
             </Sider>
 
-            <Layout>
+            <Layout style={{backgroundColor: "#FFF0F0"}}>
 
                 <Header style={{
                     display:Flex,
                     textAlign: "center",
                     justify_content: "center",
                     alignContent:"center",
-                    margin: '0 16px',
                     padding: 0,
                     background: colorBgContainer,
                     fontSize: "50px",
