@@ -121,12 +121,8 @@ const Home = () => {
                         <PlusOutlined  style={{fontSize:"70px"}} onClick={showModal}/>
                     
                         <Modal title="Создать группу" open={isModalOpen} onOk={handleOk} onCancel={handleCancel} type="primary" htmlType="submit">
-                            <p>Придумайте название для группы</p>
-                            <Form name="Title"
-                                style={{
-                                maxWidth: 600,
-                                }}
-                            >
+                            <p style={{fontSize:'15px'}}>Придумайте название для группы</p>
+                            <Form name="Title" style={{maxWidth: 600}}>
                                 <Form.Item name={['title']} label="Title" rules={[{required: true}]}>
                                     <Input onChange={(e) => {setTitle(e.target.value)}}/>
                                 </Form.Item>
