@@ -14,6 +14,24 @@ import {
 
 const { Header, Footer, Sider, Content } = Layout;
 
+const CreateGroup = (name) => {
+    console.log(localStorage.getItem("accessToken"));
+    async function sendRequest() {
+       const response = await fetch('http://localhost:3006/auth/createGroup', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json;charset=utf-8',
+                'Authorization': `Bearer ${localStorage.getItem("accessToken")}`
+            },
+            body: JSON.stringify(
+                {
+                    name,
+                }
+            )
+        });
+    }
+    sendRequest();
+}
 
 const Home = () => {
 
@@ -67,7 +85,7 @@ const Home = () => {
 
     let [groups, setdataSource] = useState([
         {
-        key: '1',
+        key: nanoid(),
         name: 'Оригинальное название',
         author: 'Кто-то оригинальный',
         time: "16.07.2024",
@@ -76,7 +94,7 @@ const Home = () => {
         },
         
         {
-            key: '2',
+            key: nanoid(),
             name: 'Оригинальное название2',
             author: 'Кто-то оригинальный',
             time: "16.07.2024",
@@ -85,7 +103,7 @@ const Home = () => {
         },
     ]);
 
-    let group =         {
+    let group = {
         key: nanoid(),
         name: title,
         author: 'Кто-то оригинальный',
@@ -97,6 +115,7 @@ const Home = () => {
     // Создание группы, имя группы в переменной title
     const handleOk = () => {
         setIsModalOpen(false);
+        CreateGroup(title);
         setdataSource([...groups, group]);
     };
 

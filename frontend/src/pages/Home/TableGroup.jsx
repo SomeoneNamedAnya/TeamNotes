@@ -39,6 +39,7 @@ const TableGroup = ({groups, removedataSource}) => {
     return (
         
         <Table dataSource={groups} columns={columns} />
+
     )
 }
 
