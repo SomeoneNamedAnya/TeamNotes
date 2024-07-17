@@ -5,6 +5,22 @@ import {Form, Button, Flex, Input, Layout, theme, Breadcrumb} from 'antd';
 
 const { Header, Content } = Layout;
 
+const sendFormToServer = async (name, email, password) => {
+    const response = await (await fetch('http://localhost:3006/auth/registration', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json;charset=utf-8'
+        },
+        body: JSON.stringify(
+            {
+                name,
+                email,
+                password
+            }
+        )
+    })).json();
+}
+
 
 const Registration = () => {
 
@@ -18,16 +34,24 @@ const Registration = () => {
         {title: <a href="/registration">Регистрация</a>}]
 
 ///////////////////////funcPost/////////////////////////////////
-    const login = () => {
-        console.log(email, password)
-        navigate('/home')
+    const signUp = () => {
+        try {
+            sendFormToServer(name, email, password);
+            console.log("Регистрация прошла успешно");
+            navigate('/entrance');
+        }
+        catch (err) {
+            console.log("Ошибка при регистрации");
+        }
+        // Лучше потом везде entrance на login или signIn заменить
     }
 ///////////////////////////////////////////////////////////////
     
     const {
         token: { colorBgContainer},
     } = theme.useToken();
-      
+
+
 
     return (
       
@@ -78,7 +102,7 @@ const Registration = () => {
                         
 
                         <Form.Item wrapperCol={{offset: 6}}>
-                            <Button style={{backgroundColor:"#B47B84"}}type="primary" htmlType="submit" onClick={login}>
+                            <Button style={{backgroundColor:"#B47B84"}}type="primary" htmlType="submit" onClick={signUp}>
                                 Зарегестрироваться
                             </Button>
                         </Form.Item>

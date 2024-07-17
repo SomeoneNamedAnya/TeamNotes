@@ -39,21 +39,20 @@ class authController {
 
     async login(req, res) {
         const email  = req.body["email"]; //То, что прилетает с клиента
-        const name  = req.body.name;
         const password = req.body.password;
         //Обработки//
         db.query("SELECT idUser, name, password FROM users WHERE email = ?",
             [email], (err, result) => {
             if (!err && result && result.length) {
-                if (name == result[0].name && bcrypt.compareSync(password, result[0].password)) {
+                if (bcrypt.compareSync(password, result[0].password)) {
                     const _id = result[0].idUser;
                     const token = generateAccessToken(_id);
                     return res.json(token);
                 }
-                else res.status(201).json("Вы ввели некорректные данные");
+                else res.status(400).json("Вы ввели некорректные данные");
             }
             else if (result && !result.length) {
-                res.status(201).json({email: `Пользователя с почтой ${email} не существует`});  //То, что мы отправляем на клиент
+                res.status(400).json({email: `Пользователя с почтой ${email} не существует`});  //То, что мы отправляем на клиент
             }
             else {
                 res.status(400).json({email: `При авторизации произошла ошибка ${err}`});
