@@ -8,6 +8,10 @@ import Wating from "./pages/Group/Waiting.jsx"
 import Participants from "./pages/Group/Participants.jsx"
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 
+import Entrance from "./Entrance/Entrance.jsx"
+import MainPage from "./MainPage/MainPage.jsx"
+import Auth from "./Entrance/Auth.jsx"
+import CreaateGroup from "./CreateGroup.jsx"
 
 const App = () => {
   return (

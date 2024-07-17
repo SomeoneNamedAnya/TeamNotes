@@ -1,10 +1,11 @@
 import {useNavigate} from "react-router-dom";
-import React, { useState } from 'react';
-
+import React, { useEffect, useState } from 'react';
 import {Button, Space, Table} from 'antd';
+import getData from "./getData";
 
 const TableInvitation = () => {
     const navigate = useNavigate();
+    getData();
     const columns = [
         {
             title: 'Название группы',
@@ -29,21 +30,28 @@ const TableInvitation = () => {
         },
     ];
 
-    let [dataSource, setdataSource] = useState([
-        {
-          key: '1',
-          name: 'Оригинальное название',
-          author: 'myemail@com',
-          invMaker: 'myemail@com',
-        },
+
+    let [dataSource, setdataSource] = useState(
+    //     [
+    //     {
+    //       key: '1',
+    //       name: 'Оригинальное название',
+    //       author: 'myemail@com',
+    //       invMaker: 'myemail@com',
+    //     },
         
-        {
-            key: '2',
-            name: 'Оригинальное название2.0',
-            author: 'myemail@com',
-            invMaker: '2myemail@com',
-        },
-    ]);
+    //     {
+    //         key: '2',
+    //         name: 'Оригинальное название2.0',
+    //         author: 'myemail@com',
+    //         invMaker: '2myemail@com',
+    //     },
+    // ]
+);
+
+// useEffect = () => {
+//     setdataSource(getData())
+// }
 
 /////////////////////////////funcPost//////////////////////////////////////////
     // Отклонение приглашения

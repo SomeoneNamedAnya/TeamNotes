@@ -3,7 +3,6 @@ import CreateNewNote from "./CreateNewNote.jsx";
 import { Flex } from "antd";
 
 const NotesList = ({notes, createNoteHandler, deleteNoteHandler, editNoteHandler}) => {
-
     return <Flex wrap={'wrap'}>
         <CreateNewNote createNoteHandler={createNoteHandler}></CreateNewNote>
         {

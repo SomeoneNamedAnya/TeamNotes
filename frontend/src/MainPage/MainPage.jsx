@@ -2,6 +2,22 @@ import { useState } from "react";
 import {nanoid} from 'nanoid';
 import NotesList from "../Components/NotesList.jsx";
 
+const AuthCheck = () => {
+    const [status, setStatus] = useState(0);
+    async function sendRequest() {
+        const response = await fetch('http://localhost:3006/auth/notes', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json;charset=utf-8',
+                'Authorization': `Bearer ${localStorage.getItem("accessToken")}`
+            }
+        });
+        setStatus(response.status);
+    }
+    sendRequest();
+    return status;
+}
+
 const MainPage = () => {
     const [notes, formNotesList] = useState([
         {
@@ -33,12 +49,16 @@ const MainPage = () => {
         notes.find(note => note.id == id).Name = name;
         formNotesList([...notes]);
     }
-    return <div className="mainPage">
+    const status = AuthCheck();
+    if (status == 201) {
+        return <div className="mainPage">
             <NotesList notes={notes} 
             createNoteHandler={createNoteHandler}
             deleteNoteHandler={deleteNoteHandler}
             editNoteHandler={editNoteHandler}/>
         </div>   
     };
+    return <div><p>Вы не авторизованы</p></div>
+}
 
 export default MainPage;
