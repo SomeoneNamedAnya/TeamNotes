@@ -1,0 +1,12 @@
+.login{
+    display: flex;
+    justify-content: center;
+    height: 90vh;
+    align-items: center;
+    flex-direction: column;
+    /* background-color: aqua; */
+}
+
+p {
+    font-size: 30px;
+}

@@ -69,7 +69,31 @@ class authController {
         const id = req.user._id;
         const name = req.body.name;
         db.query("INSERT INTO teamNotesDB.groups (adminId, groupName) VALUES (?, ?)", [id, name]);
+        db.query("SELECT LAST_INSERT_ID() as groupId", (err, result) => {
+            db.query("INSERT INTO teamNotesDB.memberships (groupId, userId) VALUES (?, ?)", [result[0].groupId, id]);
+        });
         res.status(201).json("insert successful");
+    }
+
+    async isUserAdminOfGroup(userId, groupId) {
+        db.query("SELECT idGroup FROM teamNotesDB.groups INNER JOIN users ON teamNotesDB.groups.idGroup=users.idUser;", (err, result) => {
+            if (result) return true;
+        })
+        return false;
+    }
+
+    async addUserToGroup(req, res) {
+        const adminId = req.user._id;
+        const email = req.body.email;
+        const groupId = req.body.groupId;
+        const isAdmin = isUserAdminOfGroup(adminId, groupId);
+        console.log(isAdmin);
+        let userId;
+        db.query("SELECT idUser from teamNotesDB.users WHERE email = ?", [email], (err, result) => {
+            userId = result[0].idUser;
+        });
+        db.query("INSERT INTO teamNotesDB.memberships (groupId, userId) VALUES (?, ?)", [groupId, userId]);
+        res.status(201).json("adding successful")
     }
 }
 
