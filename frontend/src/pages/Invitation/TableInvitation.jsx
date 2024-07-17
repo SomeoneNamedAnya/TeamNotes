@@ -1,12 +1,34 @@
-import {Link, useNavigate} from "react-router-dom";
-import React, { useState, useEffect } from 'react';
+import {useNavigate} from "react-router-dom";
+import React, { useState } from 'react';
 
-import {Breadcrumb, Button, Space, Flex, Table, Layout, Menu, theme,Typography } from 'antd';
-const { Header, Footer, Sider, Content } = Layout;
-
+import {Button, Space, Table} from 'antd';
 
 const TableInvitation = () => {
     const navigate = useNavigate();
+    const columns = [
+        {
+            title: 'Название группы',
+            dataIndex: 'name',
+            key: 'name',
+        },
+        {
+            title: 'Создатель группы',
+            dataIndex: 'author',
+            key: 'author',
+            },
+        
+        {
+            title: 'Действия',
+            key: 'action',
+            render: (record) => (
+              <Space size="middle">
+                 <Button onClick={() => {acceptdataSource(record.key)}}>Принять</Button>
+                <Button onClick={() => {removedataSource(record.key)}}>Отклонить</Button>
+              </Space>
+            ),
+        },
+    ];
+
     let [dataSource, setdataSource] = useState([
         {
           key: '1',
@@ -22,6 +44,9 @@ const TableInvitation = () => {
             invMaker: '2myemail@com',
         },
     ]);
+
+/////////////////////////////funcPost//////////////////////////////////////////
+    // Отклонение приглашения
     const removedataSource = (key) => {
         
         dataSource = dataSource.filter((e) => e.key !== key)
@@ -29,42 +54,14 @@ const TableInvitation = () => {
         setdataSource(dataSource);
     }
     
+    // Принятие приглашения
     const acceptdataSource = (key) => {
         
         dataSource = dataSource.filter((e) => e.key !== key)
         console.log(dataSource);
         setdataSource(dataSource);
     }
-
-    const columns = [
-        {
-            title: 'Название группы',
-            dataIndex: 'name',
-            key: 'name',
-        },
-        {
-            title: 'Создатель группы',
-            dataIndex: 'author',
-            key: 'author',
-            },
-        {
-            title: 'Создатель приглашения',
-            dataIndex: 'invMaker',
-            key: 'invMaker',
-        },
-        
-        {
-            title: 'Действия',
-            key: 'action',
-            render: (record) => (
-              <Space size="middle">
-                 <Button onClick={() => {acceptdataSource(record.key)}}>Принять</Button>
-                <Button onClick={() => {removedataSource(record.key)}}>Отклонить</Button>
-              </Space>
-            ),
-        },
-    ];
-
+////////////////////////////////////////////////////////////////////// 
 
     return (
         

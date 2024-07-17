@@ -1,64 +1,88 @@
-import {useEffect, useState } from "react";
-import {Link, useNavigate} from "react-router-dom";
+import {useState } from "react";
+import {useNavigate} from "react-router-dom";
 import style from "./entrance.module.css"
-import {useDispatch, useSelector} from "react-redux";
-import {setAuthAction} from "../../store/userReducers.js";
-import  Home from "../Home/Home.jsx";
-//import {userLogin} from "../../../api/userApi.js";
+
+import {Form, Button, Flex, Input, Layout, theme, Breadcrumb } from 'antd';
+
+const { Header, Content } = Layout;
 
 const Entrance = () => {
+
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
-    let cons = "0";
+    
     const navigate = useNavigate()
-    const isAuth = useSelector(state => state.user.isAuth)
-    const dispatch = useDispatch()
-    useEffect(() => {
-       
-        if (cons === "1") {
-           
-            navigate("/home");
-        }
-      });
 
-    const formHandler = async (elem) => {
+    const options = [{title: <a href="/entrance">Вход</a>},
+                    {title: <a href="/registration">Регистрация</a>}]
 
-        // userLogin({email, password}).then((data) => {
-        //     console.log(data)
-        //     dispatch(setAuthAction(data))
-        //   })
-        
+///////////////////////funcPost/////////////////////////////////
+    const login = () => {
 
-        // const data = await (await fetch('http://localhost:3005/login', {
-        //     method: 'POST',
-        //     headers: {
-        //         'Content-Type': 'application/json;charset=utf-8'
-        //     },
-        //     body: JSON.stringify({
-        //         email,
-        //         password
-
-        //     })
-            
-        // })).json();
-        
-        //console.log(data);
-        cons = "1";
-        navigate('/home');
-        
+        navigate('/home')
     }
+//////////////////////////////////////////////////////// 
+    
+    const {
+        token: { colorBgContainer},
+    } = theme.useToken();
 
     return (
-        <div>
-            <div className={style.form}>
-            <p>Создать аккаунт</p>
-                <form  className={style.reg}>
-                    <input type='email' autocomplete="on" placeholder="Почта" onChange={e => setEmail(e.target.value)}></input>
-                    <input type="password" autocomplete="on" placeholder="Пароль" onChange={e => setPassword(e.target.value)}></input>
-                    <button className={style.subButton} onClick={formHandler} type="button">Вход</button>
-                </form>
-            </div>
-        </div> 
+      
+        <Layout style={{
+            minHeight: '100vh',
+          }}>    
+            <Layout style={{backgroundColor: "#FFF0F0"}}>
+
+                <Header style={{
+                    display:Flex,
+                    textAlign: "center",
+                    justify_content: "center",
+                    alignContent:"center",
+                    padding: 0,
+                    height: "10vh",
+                    background: colorBgContainer,
+                    backgroundColor: '#944E63',
+                    fontSize: "35px",
+                    color: "black"
+                    
+                }}>
+                    TeamNotes
+                </Header>
+    
+                <Content style={{
+                    margin: '0 16px',
+                    height: "100%",  
+                }}>
+                    <div className={style.login}>
+                    
+                    <p style={{margin: "0 0 5px"}}>Вход</p>
+                    <Breadcrumb style={{margin: "0 0 10px"}} items={options} />
+                    <Form name="login"
+                        style={{
+                        maxWidth: 400,
+                        }}
+                    >   
+            
+                        <Form.Item name={['email']} rules={[{required: true}]}>
+                            <Input style={{width:"300px"}} onChange={(e) => {setEmail(e.target.value)}} placeholder="email"/>
+                        </Form.Item>
+
+                        <Form.Item name={['password']} rules={[{required: true}]}>
+                            <Input.Password style={{width:"300px"}} onChange={(e) => {setPassword(e.target.value)}} placeholder="password"/>
+                        </Form.Item>
+                        
+                        <Form.Item wrapperCol={{offset: 10}}>
+                            <Button style={{backgroundColor:"#B47B84"}}type="primary" htmlType="submit" onClick={login}>
+                                Вход
+                            </Button>
+                        </Form.Item>
+                        
+                    </Form>
+                    </div> 
+                </Content>
+            </Layout>
+        </Layout>
     )
 };
 export default Entrance;

@@ -1,30 +1,33 @@
-import {Link, useNavigate} from "react-router-dom";
+import {useNavigate} from "react-router-dom";
+import "./home.css"
 import React, { useState, useEffect } from 'react';
-import {Breadcrumb, Button, Space, Flex, Table, Layout, Menu, theme,Typography } from 'antd';
+import {Input, Form, Modal, Flex, Layout, Menu, theme} from 'antd';
 import TableGroup from "./TableGroup";
-import type { MenuProps } from 'antd';
 import {
     TeamOutlined,
     MailOutlined,
     HomeOutlined,
-    QuestionCircleOutlined
+    QuestionCircleOutlined,
+    PlusOutlined
   } from '@ant-design/icons';
 
 const { Header, Footer, Sider, Content } = Layout;
 
 
 const Home = () => {
+
     const navigate = useNavigate();
     
-    type MenuItem = Required<MenuProps>['items'][number];
-
-    const items: MenuItem[] = [
+    const items = [
         { key: '1',  icon:<TeamOutlined />, label: 'Группы', onClick:() => {navigate("/home")} },
         { key: '2',  icon:<MailOutlined />, label: 'Приглашения', onClick:() => {navigate("/invitation")}  },
         { key: '3',  icon:<QuestionCircleOutlined />, label: 'О приложении',  onClick:() => {navigate("/about")}},
         { key: '4',  icon:<HomeOutlined />, label: 'Выход',  onClick:() => {navigate("/entrance")}},
     ];
+
     const [collapsed, setCollapsed] = useState(false);
+    let innerTextName;
+    let innerTextEmail;
 
     useEffect(() => {
         
@@ -40,16 +43,34 @@ const Home = () => {
         document.getElementById("userEmail").innerHTML = innerTextEmail;
 
       });
-  
-    const optionsGroup = [{title: <a href="/group">Заметки</a>,},
-        {title: <a href="/participants">Участники</a>,}]
-    
-    let innerTextName;
-    let innerTextEmail;
     
     const {
-        token: { colorBgContainer, borderRadiusLG },
-    } = theme.useToken();    
+        token: { colorBgContainer},
+    } = theme.useToken();
+
+
+    const [title, setTitle] = useState();
+    const [isModalOpen, setIsModalOpen] = useState(false);
+
+
+    const showModal = () => {
+
+        setIsModalOpen(true);
+    };
+
+    const handleCancel = () => {
+
+        setIsModalOpen(false);
+    };
+
+//////////////////////funcPost///////////////////////////////
+
+    // Создание группы, имя группы в переменной title
+    const handleOk = () => {
+        
+        setIsModalOpen(false);
+    };
+/////////////////////////////////////////////////////  
     
     return (
       
@@ -95,6 +116,24 @@ const Home = () => {
                     </div>
                     
                 </Content>
+                <Footer style={{backgroundColor:"#FFF0F0", height:"15vh"}}>
+                    <div id="ButtonAdd">
+                        <PlusOutlined  style={{fontSize:"70px"}} onClick={showModal}/>
+                    
+                        <Modal title="Создать группу" open={isModalOpen} onOk={handleOk} onCancel={handleCancel} type="primary" htmlType="submit">
+                            <p>Придумайте название для группы</p>
+                            <Form name="Title"
+                                style={{
+                                maxWidth: 600,
+                                }}
+                            >
+                                <Form.Item name={['title']} label="Title" rules={[{required: true}]}>
+                                    <Input onChange={(e) => {setTitle(e.target.value)}}/>
+                                </Form.Item>
+                            </Form>
+                        </Modal>
+                    </div>
+                </Footer>
                 
             </Layout>
 

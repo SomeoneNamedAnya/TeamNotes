@@ -1,30 +1,30 @@
-import {Link, useNavigate} from "react-router-dom";
+import {useNavigate} from "react-router-dom";
 import React, { useState, useEffect } from 'react';
 import MainPage from "../../MainPage/MainPage.jsx";
-import type { MenuProps } from 'antd';
 import {
     TeamOutlined,
     MailOutlined,
     HomeOutlined,
     QuestionCircleOutlined
   } from '@ant-design/icons';
-import {Breadcrumb, Button, Space, Flex, Table, Layout, Menu, theme,Typography } from 'antd';
+import {Breadcrumb, Flex, Layout, Menu, theme} from 'antd';
 
-const { Header, Footer, Sider, Content } = Layout;
+const { Header, Sider, Content } = Layout;
 
 
 const Group = () => {
     const navigate = useNavigate();
     
-    type MenuItem = Required<MenuProps>['items'][number];
-
-    const items: MenuItem[] = [
+    const items = [
         { key: '1',  icon:<TeamOutlined />, label: 'Группы', onClick:() => {navigate("/home")} },
         { key: '2',  icon:<MailOutlined />, label: 'Приглашения', onClick:() => {navigate("/invitation")}  },
         { key: '3',  icon:<QuestionCircleOutlined />, label: 'О приложении',  onClick:() => {navigate("/about")}},
         { key: '4',  icon:<HomeOutlined />, label: 'Выход',  onClick:() => {navigate("/entrance")}},
     ];
     const [collapsed, setCollapsed] = useState(false);
+
+    let innerTextName;
+    let innerTextEmail;
 
     useEffect(() => {
         
@@ -39,19 +39,16 @@ const Group = () => {
         document.getElementById("userName").innerHTML = innerTextName;
         document.getElementById("userEmail").innerHTML = innerTextEmail;
 
-      });
+    });
 
     const {
-        token: { colorBgContainer, borderRadiusLG },
-    } = theme.useToken();  
-    const optionsGroup = [{title: <a href="/group">Заметки</a>,},
-        {title: <a href="/participants">Участники</a>,},
-        {title: <a href="/wating">Приглашения</a>,}]
-    
-    let innerTextName;
-    let innerTextEmail;
+        token: { colorBgContainer },
+    } = theme.useToken();
       
-
+    const optionsGroup = [{title: <a href="/group">Заметки</a>,},
+                          {title: <a href="/participants">Участники</a>,},
+                          {title: <a href="/wating">Приглашения</a>,}]
+    
     return (
       
         <Layout style={{

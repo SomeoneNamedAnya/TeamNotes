@@ -1,37 +1,35 @@
-import {Link, useNavigate} from "react-router-dom";
+import { useNavigate} from "react-router-dom";
 import React, { useState, useEffect } from 'react';
-import MainPage from "../../MainPage/MainPage.jsx"
 import TableWaiting from "./TableWaiting.jsx"
-import Icon from '@ant-design/icons';
 import "./participants.css"
-import type { MenuProps } from 'antd';
 import {
     TeamOutlined,
     MailOutlined,
     HomeOutlined,
     QuestionCircleOutlined,
-    PlusOutlined
   } from '@ant-design/icons';
-import {Breadcrumb, Modal, Form, Input, Button, Space, Flex, Table, Layout, Menu, theme,Typography } from 'antd';
+import {Breadcrumb, Flex, Layout, Menu, theme } from 'antd';
 import { useForm } from "antd/es/form/Form.js";
-const { Header, Footer, Sider, Content } = Layout;
+const { Header, Sider, Content } = Layout;
 
 
 const Wating = () => {
-    const navigate = useNavigate();
-    
-    type MenuItem = Required<MenuProps>['items'][number];
 
-    const items: MenuItem[] = [
+    const navigate = useNavigate();
+
+    const optionsGroup = [{title: <a href="/group">Заметки</a>,},
+                          {title: <a href="/participants">Участники</a>,},
+                          {title: <a href="/wating">Приглашения</a>,}]
+    
+    const items = [
         { key: '1',  icon:<TeamOutlined />, label: 'Группы', onClick:() => {navigate("/home")} },
         { key: '2',  icon:<MailOutlined />, label: 'Приглашения', onClick:() => {navigate("/invitation")}  },
         { key: '3',  icon:<QuestionCircleOutlined />, label: 'О приложении',  onClick:() => {navigate("/about")}},
         { key: '4',  icon:<HomeOutlined />, label: 'Выход',  onClick:() => {navigate("/entrance")}},
     ];
-    const [collapsed, setCollapsed] = useState(false);
-    const [isModalOpen, setIsModalOpen] = useState(false);
-    const {inv, submitInv} = useForm();
 
+    const [collapsed, setCollapsed] = useState(false);
+    
     useEffect(() => {
         
         if (collapsed) {
@@ -49,42 +47,11 @@ const Wating = () => {
   
     let innerTextName;
     let innerTextEmail; 
-    const initialStateEmail = { email: ""};
-    const [email, setEmail] = useState()
-    const [formStatus, setFormStatus] = useState(initialStateEmail)
+
     const {
-        token: { colorBgContainer, borderRadiusLG },
+        token: { colorBgContainer},
     } = theme.useToken();    
-    
-    const optionsGroup = [{title: <a href="/group">Заметки</a>,},
-                          {title: <a href="/participants">Участники</a>,},
-                          {title: <a href="/wating">Приглашения</a>,}]
-    
-    const showModal = () => {
-        setIsModalOpen(true);
-    };
-    
-    const validateMessages = {
-        required: '${label} is required!',
-        types: {
-          email: '${label} is not a valid email!',
-        },
-      };
-    const onFinish = (values) => {
-        setEmail(initialStateEmail);
-        console.log(email);
-    };
-   
-    const handleOk = () => {
-        //email.email = "";
-        console.log(email);
-        setIsModalOpen(false);
-    };
-    const handleCancel = () => {
-        setEmail(initialStateEmail);
-        console.log(email);
-        setIsModalOpen(false);
-    };
+
     return (
       
         <Layout style={{
@@ -119,7 +86,7 @@ const Wating = () => {
                     color: "black"
                     
                 }}>
-                    Участники конкретной группы
+                    История приглашений
                 </Header>
                 <Breadcrumb style={{
                     margin: '10px 30px',
@@ -130,7 +97,7 @@ const Wating = () => {
                     
                 }}>
                 
-                <TableWaiting />  
+                    <TableWaiting />  
                 
                        
                 </Content>

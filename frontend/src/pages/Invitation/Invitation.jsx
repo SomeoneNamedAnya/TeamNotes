@@ -1,23 +1,20 @@
-import {Link, useNavigate} from "react-router-dom";
+import {useNavigate} from "react-router-dom";
 import React, { useState, useEffect } from 'react';
-import type { MenuProps } from 'antd';
 import TableInvitation from "./TableInvitation";
-
 import {
     TeamOutlined,
     MailOutlined,
     HomeOutlined,
     QuestionCircleOutlined
   } from '@ant-design/icons';
-import {Breadcrumb, Button, Space, Flex, Table, Layout, Menu, theme,Typography } from 'antd';
-const { Header, Footer, Sider, Content } = Layout;
+import {Flex, Layout, Menu, theme } from 'antd';
+const { Header, Sider, Content } = Layout;
 
 const Invitation = () => {
+
     const navigate = useNavigate();
     
-    type MenuItem = Required<MenuProps>['items'][number];
-
-    const items: MenuItem[] = [
+    const items = [
         { key: '1',  icon:<TeamOutlined />, label: 'Группы', onClick:() => {navigate("/home")} },
         { key: '2',  icon:<MailOutlined />, label: 'Приглашения', onClick:() => {navigate("/invitation")}  },
         { key: '3',  icon:<QuestionCircleOutlined />, label: 'О приложении',  onClick:() => {navigate("/about")}},
@@ -44,7 +41,7 @@ const Invitation = () => {
     let innerTextEmail;
     
     const {
-        token: { colorBgContainer, borderRadiusLG },
+        token: { colorBgContainer},
     } = theme.useToken();     
     
     return (
