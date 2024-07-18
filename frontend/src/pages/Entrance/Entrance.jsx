@@ -21,7 +21,8 @@ const SendFormToServer = (email, password) => {
                 }
             )
         });
-        localStorage.setItem("accessToken", response.json());
+        const token = await(response).json();
+        localStorage.setItem("accessToken", token);
         localStorage.setItem("authResult", response.status);
     }
     sendRequest();
@@ -47,6 +48,7 @@ const Entrance = () => {
             }
             else {
                 console.log("Авторизация прошла успешно");
+                console.log(localStorage.getItem("accessToken"));
                 navigate('/home');
             }
         }

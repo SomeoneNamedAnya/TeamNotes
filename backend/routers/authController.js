@@ -81,7 +81,7 @@ class authController {
         console.log("getInv")
         const id = req.user._id;
         console.log(id)
-        sqlReq = "SELECT teamnotesdb.users.email, teamnotesdb.groups.groupName FROM \
+        let sqlReq = "SELECT teamnotesdb.users.email, teamnotesdb.groups.groupName FROM \
         teamnotesdb.invitations join teamnotesdb.groups on teamnotesdb.invitations.groupId = teamnotesdb.groups.idGroup \
         join teamnotesdb.users on teamnotesdb.groups.adminId = teamnotesdb.users.idUser where teamnotesdb.invitations.userId = 3;"
         idGroup = db.query(sqlReq, [id], (err, result) => {
@@ -104,6 +104,24 @@ class authController {
     //     });
     //     res.status(201).json("insert successful");
     // }
+    async getUserGroups(req, res) {
+        const stringQuery = "SELECT groupName, name, creationDate From teamnotesdb.memberships join teamnotesdb.groups \on teamnotesdb.memberships.groupId = teamnotesdb.groups.idGroup join teamnotesdb.users on \
+teamnotesdb.groups.adminId = teamnotesdb.users.idUser where teamnotesdb.memberships.userId = ?;";
+        const id = req.user._id;
+        let formatted = [];
+        db.query(stringQuery, [id], (err, result) => {
+            console.log(id, result);
+        });
+        
+
+        
+    }
+
+    // key: nanoid(),
+    //     name: 'Оригинальное название',
+    //     author: 'Кто-то оригинальный',
+    //     time: "16.07.2024",
+    //     add: "?",
 
     async isUserAdminOfGroup(userId, groupId) {
         db.query("SELECT idGroup FROM teamNotesDB.groups INNER JOIN users ON teamNotesDB.groups.idGroup=users.idUser;", (err, result) => {
@@ -112,19 +130,19 @@ class authController {
         return false;
     }
 
-    async addUserToGroup(req, res) {
-        const adminId = req.user._id;
-        const email = req.body.email;
-        const groupId = req.body.groupId;
-        const isAdmin = isUserAdminOfGroup(adminId, groupId);
-        console.log(isAdmin);
-        let userId;
-        db.query("SELECT idUser from teamNotesDB.users WHERE email = ?", [email], (err, result) => {
-            userId = result[0].idUser;
-        });
-        db.query("INSERT INTO teamNotesDB.memberships (groupId, userId) VALUES (?, ?)", [groupId, userId]);
-        res.status(201).json("adding successful")
-    }
+    // async addUserToGroup(req, res) {
+    //     const adminId = req.user._id;
+    //     const email = req.body.email;
+    //     const groupId = req.body.groupId;
+    //     const isAdmin = isUserAdminOfGroup(adminId, groupId);
+    //     console.log(isAdmin);
+    //     let userId;
+    //     db.query("SELECT idUser from teamNotesDB.users WHERE email = ?", [email], (err, result) => {
+    //         userId = result[0].idUser;
+    //     });
+    //     db.query("INSERT INTO teamNotesDB.memberships (groupId, userId) VALUES (?, ?)", [groupId, userId]);
+    //     res.status(201).json("adding successful")
+    // }
 }
 
 module.exports = new authController();
