@@ -14,6 +14,35 @@ import {
 
 const { Header, Footer, Sider, Content } = Layout;
 
+const CreateGroup = (name) => {
+    console.log(localStorage.getItem("accessToken"));
+    async function sendRequest() {
+       const response = await fetch('http://localhost:3006/auth/createGroup', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json;charset=utf-8',
+                'Authorization': `Bearer ${localStorage.getItem("accessToken")}`
+            },
+            body: JSON.stringify(
+                {
+                    name,
+                }
+            )
+        });
+    }
+    sendRequest();
+}
+
+const GetGroups = async () => {
+    const groups = await(await fetch('http://localhost:3006/auth/getUserGroups', {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json;charset=utf-8',
+            'Authorization': `Bearer ${localStorage.getItem("accessToken")}`
+        }
+    })).json();
+    return groups;
+}
 
 const Home = () => {
 
@@ -64,28 +93,30 @@ const Home = () => {
         setIsModalOpen(false);
     };
 
+    let [groups, setdataSource] = useState([{ idGroup: 16, adminId: 9, groupName: 'some name' }]);
+    const beginGroups = GetGroups();
+    //console.log(beginGroups);
+    //setdataSource(beginGroups);
+    //     {
+    //     key: nanoid(),
+    //     name: 'Оригинальное название',
+    //     author: 'Кто-то оригинальный',
+    //     time: "16.07.2024",
+    //     add: "?",
 
-    let [groups, setdataSource] = useState([
-        {
-        key: '1',
-        name: 'Оригинальное название',
-        author: 'Кто-то оригинальный',
-        time: "16.07.2024",
-        add: "?",
-
-        },
+    //     },
         
-        {
-            key: '2',
-            name: 'Оригинальное название2',
-            author: 'Кто-то оригинальный',
-            time: "16.07.2024",
-            add: "?",
+    //     {
+    //         key: nanoid(),
+    //         name: 'Оригинальное название2',
+    //         author: 'Кто-то оригинальный',
+    //         time: "16.07.2024",
+    //         add: "?",
             
-        },
-    ]);
+    //     },
+    // ]);
 
-    let group =         {
+    let group = {
         key: nanoid(),
         name: title,
         author: 'Кто-то оригинальный',
@@ -97,6 +128,7 @@ const Home = () => {
     // Создание группы, имя группы в переменной title
     const handleOk = () => {
         setIsModalOpen(false);
+        CreateGroup(title);
         setdataSource([...groups, group]);
     };
 
