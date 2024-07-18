@@ -1,11 +1,11 @@
 import {useNavigate} from "react-router-dom";
 import React, { useEffect, useState } from 'react';
 import {Button, Space, Table} from 'antd';
-// import {GetData} from "./GetData.jsx";
+import GetData from "./GetData.jsx";
 
 const TableInvitation = () => {
     const navigate = useNavigate();
-    getData();
+    GetData();
     const columns = [
         {
             title: 'Название группы',

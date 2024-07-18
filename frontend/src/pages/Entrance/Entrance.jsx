@@ -1,4 +1,4 @@
-import {useState } from "react";
+import { useState } from "react";
 import {useNavigate} from "react-router-dom";
 import style from "./entrance.module.css"
 import Login from "./Auth";
@@ -6,6 +6,26 @@ import Login from "./Auth";
 import {Form, Button, Flex, Input, Layout, theme, Breadcrumb } from 'antd';
 
 const { Header, Content } = Layout;
+
+const SendFormToServer = (email, password) => {
+    async function sendRequest() {
+        const response = await fetch('http://localhost:3006/auth/login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json;charset=utf-8'
+            },
+            body: JSON.stringify(
+                {
+                    email,
+                    password
+                }
+            )
+        });
+        localStorage.setItem("accessToken", response.json());
+        localStorage.setItem("authResult", response.status);
+    }
+    sendRequest();
+}
 
 const Entrance = () => {
 
@@ -18,10 +38,25 @@ const Entrance = () => {
                     {title: <a href="/registration">Регистрация</a>}]
 
 ///////////////////////funcPost/////////////////////////////////
-    const login = async () => {
-        Login(email, password)
-        navigate('/home')
+    const signIn = () => {
+        try {
+            SendFormToServer(email, password);
+            const status = localStorage.getItem("authResult");
+            if (status == 400) {
+                console.log("Вы не зарегестрированы или произошла ошибка при авторизации");
+            }
+            else {
+                console.log("Авторизация прошла успешно");
+                navigate('/home');
+            }
+        }
+        catch (err) {
+            console.log(err);
+            console.log("Вы не зарегестрированы или произошла ошибка при авторизации");
+        }
     }
+
+
 //////////////////////////////////////////////////////// 
     
     const {
@@ -74,7 +109,7 @@ const Entrance = () => {
                         </Form.Item>
                         
                         <Form.Item wrapperCol={{offset: 10}}>
-                            <Button style={{backgroundColor:"#B47B84"}}type="primary" htmlType="submit" onClick={login}>
+                            <Button style={{backgroundColor:"#B47B84"}}type="primary" htmlType="submit" onClick={signIn}>
                                 Вход
                             </Button>
                         </Form.Item>

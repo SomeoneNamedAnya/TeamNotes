@@ -22,10 +22,10 @@ class authController {
         const name  = req.body.name;
         const password = bcrypt.hashSync(req.body.password, 7);
         //Обработки//
-        db.query("SELECT * FROM users WHERE email = ?",
+        db.query("SELECT * FROM teamnotesdb.users WHERE email = ?",
             [email], (err, result) => {
             if (!err && result && !result.length) {
-                db.query("INSERT INTO users (name, email, password) VALUES (?, ?, ?)", [name, email, password]);
+                db.query("INSERT INTO teamnotesdb.users (name, email, password) VALUES (?, ?, ?)", [name, email, password]);
                 res.status(201).json({email: `Вы успешно зарегистрировались под почтой ${email}`});
             }
             else if (result && result.length) {
@@ -38,24 +38,24 @@ class authController {
     }
 
     async login(req, res) {
-        console.log("qwdqdqwd")
-
-        const email  = req.body.email; //То, что прилетает с клиента
+        const email  = req.body["email"]; //То, что прилетает с клиента
+        const name  = req.body.name;
         const password = req.body.password;
         console.log(email);
         //Обработки//
-        db.query("SELECT idUser, name, password FROM teamnotesdb.users WHERE email = ?",
+        db.query("SELECT idUser, email, password FROM teamnotesdb.users WHERE email = ?",
             [email], (err, result) => {
             if (!err && result && result.length) {
+                console.log("----------", result)
                 if (email == result[0].email && bcrypt.compareSync(password, result[0].password)) {
                     const _id = result[0].idUser;
                     const token = generateAccessToken(_id);
                     return res.json(token);
                 }
-                else res.status(201).json("Вы ввели некорректные данные");
+                else res.status(400).json("Вы ввели некорректные данные");
             }
             else if (result && !result.length) {
-                res.status(201).json({email: `Пользователя с почтой ${email} не существует`});  //То, что мы отправляем на клиент
+                res.status(400).json({email: `Пользователя с почтой ${email} не существует`});  //То, что мы отправляем на клиент
             }
             else {
                 res.status(400).json({email: `При авторизации произошла ошибка ${err}`});
@@ -78,7 +78,9 @@ class authController {
     }
 
     async getInvitation(req, res) {
+        console.log("getInv")
         const id = req.user._id;
+        console.log(id)
         sqlReq = "SELECT teamnotesdb.users.email, teamnotesdb.groups.groupName FROM \
         teamnotesdb.invitations join teamnotesdb.groups on teamnotesdb.invitations.groupId = teamnotesdb.groups.idGroup \
         join teamnotesdb.users on teamnotesdb.groups.adminId = teamnotesdb.users.idUser where teamnotesdb.invitations.userId = 3;"
@@ -88,6 +90,20 @@ class authController {
         });
         res.status(201).json("insert successful");
     }
+
+    // async getInvitation(req, res) {
+    //     console.log("getInv")
+    //     const id = req.user._id;
+    //     console.log(id)
+    //     sqlReq = "SELECT teamnotesdb.users.email, teamnotesdb.groups.groupName FROM \
+    //     teamnotesdb.invitations join teamnotesdb.groups on teamnotesdb.invitations.groupId = teamnotesdb.groups.idGroup \
+    //     join teamnotesdb.users on teamnotesdb.groups.adminId = teamnotesdb.users.idUser where teamnotesdb.invitations.userId = 3;"
+    //     idGroup = db.query(sqlReq, [id], (err, result) => {
+    //         console.log(result)
+    //         res.dataInv.json(result)
+    //     });
+    //     res.status(201).json("insert successful");
+    // }
 
     async isUserAdminOfGroup(userId, groupId) {
         db.query("SELECT idGroup FROM teamNotesDB.groups INNER JOIN users ON teamNotesDB.groups.idGroup=users.idUser;", (err, result) => {
