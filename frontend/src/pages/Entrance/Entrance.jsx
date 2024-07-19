@@ -7,6 +7,7 @@ import {Form, Button, Flex, Input, Layout, theme, Breadcrumb } from 'antd';
 
 const { Header, Content } = Layout;
 
+
 const SendFormToServer = (email, password) => {
     async function sendRequest() {
         const response = await fetch('http://localhost:3006/auth/login', {
@@ -27,6 +28,9 @@ const SendFormToServer = (email, password) => {
     }
     sendRequest();
 }
+
+
+
 
 const Entrance = () => {
 

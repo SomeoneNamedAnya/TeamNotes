@@ -2,6 +2,8 @@ import {useNavigate} from "react-router-dom";
 import React, { useState} from 'react';
 import {Button, Space, Table, } from 'antd';
 
+
+
 const TableGroup = ({groups, removedataSource}) => {
 
     const navigate = useNavigate();
@@ -9,18 +11,23 @@ const TableGroup = ({groups, removedataSource}) => {
     const columns = [
         {
             title: 'Название группы',
+            dataIndex: 'groupName',
+            key: 'groupName',
+        },
+        {
+            title: 'Создатель группы',
             dataIndex: 'name',
             key: 'name',
         },
         {
-            title: 'Создатель группы',
-            dataIndex: 'author',
-            key: 'author',
-            },
+            title: 'Почта создателя группы',
+            dataIndex: 'email',
+            key: 'email',
+        },
         {
             title: 'Время создания',
-            dataIndex: 'time',
-            key: 'time',
+            dataIndex: 'creationDate',
+            key: 'creationDate',
         },
         
         {
@@ -29,7 +36,7 @@ const TableGroup = ({groups, removedataSource}) => {
             render: (record) => (
               <Space size="middle">
                 <Button onClick={() => {navigate("/group")}}>Войти</Button>
-                <Button onClick={() => {removedataSource(record.key)}}>Уйти</Button>
+                <Button onClick={() => {removedataSource(record)}}>Уйти</Button>
               </Space>
             ),
         },

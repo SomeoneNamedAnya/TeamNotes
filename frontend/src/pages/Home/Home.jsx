@@ -41,8 +41,55 @@ const GetGroups = async () => {
             'Authorization': `Bearer ${localStorage.getItem("accessToken")}`
         }
     })).json();
+    //console.log("qwertyu", groups)
     return groups;
 }
+
+
+const RemoveGroup = async(email, group) =>{
+    console.log("RemoveGroup")
+    const result = await (await fetch('http://localhost:3006/auth/removeGroup', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json;charset=utf-8',
+            'Authorization': `Bearer ${localStorage.getItem("accessToken")}`
+        }, 
+        body:  JSON.stringify({
+            email,
+            group
+        })
+    })).json();
+    console.log("RemoveGroup2")
+}
+
+const GetName = async(email, group) =>{
+    
+    const result = await (await fetch('http://localhost:3006/auth/getName', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json;charset=utf-8',
+            'Authorization': `Bearer ${localStorage.getItem("accessToken")}`
+        }, 
+    })).json();
+    
+   // console.log(result)
+    return result
+}
+
+
+const GetEmail = async(email, group) =>{
+    
+    const result = await (await fetch('http://localhost:3006/auth/getEmail', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json;charset=utf-8',
+            'Authorization': `Bearer ${localStorage.getItem("accessToken")}`
+        }, 
+    })).json();
+    //console.log(result)
+    return result
+}
+
 
 const Home = () => {
 
@@ -52,12 +99,18 @@ const Home = () => {
         { key: '1',  icon:<TeamOutlined />, label: 'Группы', onClick:() => {navigate("/home")} },
         { key: '2',  icon:<MailOutlined />, label: 'Приглашения', onClick:() => {navigate("/invitation")}  },
         { key: '3',  icon:<QuestionCircleOutlined />, label: 'О приложении',  onClick:() => {navigate("/about")}},
-        { key: '4',  icon:<HomeOutlined />, label: 'Выход',  onClick:() => {navigate("/entrance")}},
+        { key: '4',  icon:<HomeOutlined />, label: 'Выход',  onClick:() => {navigate("/registration")}},
     ];
 
     const [collapsed, setCollapsed] = useState(false);
     let innerTextName;
     let innerTextEmail;
+
+    let [userinnerTextName, setUserinnerTextName] = useState()
+    let [userinnerTextEmail, setinnerTextEmail] = useState()
+    
+    GetName().then((value) => {setUserinnerTextName(value.result[0].name)})
+    GetEmail().then((value) => {setinnerTextEmail(value.result[0].email)})
 
     useEffect(() => {
         
@@ -65,8 +118,8 @@ const Home = () => {
             innerTextName = "";
             innerTextEmail = "";
         } else {
-            innerTextEmail = "user@email.com";
-            innerTextName = "User Name";
+            innerTextEmail = userinnerTextEmail;
+            innerTextName = userinnerTextName;
         }
         
         document.getElementById("userName").innerHTML = innerTextName;
@@ -93,29 +146,9 @@ const Home = () => {
         setIsModalOpen(false);
     };
 
-    let [groups, setdataSource] = useState([{ idGroup: 16, adminId: 9, groupName: 'some name' }]);
-    const beginGroups = GetGroups();
-    //console.log(beginGroups);
-    //setdataSource(beginGroups);
-    //     {
-    //     key: nanoid(),
-    //     name: 'Оригинальное название',
-    //     author: 'Кто-то оригинальный',
-    //     time: "16.07.2024",
-    //     add: "?",
-
-    //     },
-        
-    //     {
-    //         key: nanoid(),
-    //         name: 'Оригинальное название2',
-    //         author: 'Кто-то оригинальный',
-    //         time: "16.07.2024",
-    //         add: "?",
-            
-    //     },
-    // ]);
-
+    let [groups, setdataSource] = useState();
+    GetGroups().then((value) => {setdataSource(value.result)})
+   
     let group = {
         key: nanoid(),
         name: title,
@@ -134,8 +167,8 @@ const Home = () => {
 
     // Удаление группы
     const removedataSource = (key) => {
-    
-        groups = groups.filter((e) => e.key !== key)
+        //console.log(key)
+        RemoveGroup(key.email, key.groupName)
         setdataSource(groups);
     }
     

@@ -9,18 +9,49 @@ import {
 import { Flex,  Layout, Menu, theme} from 'antd';
 const { Header, Sider, Content } = Layout;
 
+const GetName = async(email, group) =>{
+    
+    const result = await (await fetch('http://localhost:3006/auth/getName', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json;charset=utf-8',
+            'Authorization': `Bearer ${localStorage.getItem("accessToken")}`
+        }, 
+    })).json();
+    
+   // console.log(result)
+    return result
+}
 
-const Group = () => {
+
+const GetEmail = async(email, group) =>{
+    
+    const result = await (await fetch('http://localhost:3006/auth/getEmail', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json;charset=utf-8',
+            'Authorization': `Bearer ${localStorage.getItem("accessToken")}`
+        }, 
+    })).json();
+    //console.log(result)
+    return result
+}
+
+const About = () => {
     const navigate = useNavigate();
 
     const items = [
         { key: '1',  icon:<TeamOutlined />, label: 'Группы', onClick:() => {navigate("/home")} },
         { key: '2',  icon:<MailOutlined />, label: 'Приглашения', onClick:() => {navigate("/invitation")}  },
         { key: '3',  icon:<QuestionCircleOutlined />, label: 'О приложении',  onClick:() => {navigate("/about")}},
-        { key: '4',  icon:<HomeOutlined />, label: 'Выход',  onClick:() => {navigate("/entrance")}},
+        { key: '4',  icon:<HomeOutlined />, label: 'Выход',  onClick:() => {navigate("/registration")}},
     ];
     const [collapsed, setCollapsed] = useState(false);
-
+    let [userinnerTextName, setUserinnerTextName] = useState()
+    let [userinnerTextEmail, setinnerTextEmail] = useState()
+    
+    GetName().then((value) => {setUserinnerTextName(value.result[0].name)})
+    GetEmail().then((value) => {setinnerTextEmail(value.result[0].email)})
     useEffect(() => {
         
         if (collapsed) {
@@ -92,4 +123,4 @@ const Group = () => {
        
     )
 };
-export default Group;
+export default About;

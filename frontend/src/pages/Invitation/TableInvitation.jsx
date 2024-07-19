@@ -1,76 +1,114 @@
 import {useNavigate} from "react-router-dom";
 import React, { useEffect, useState } from 'react';
 import {Button, Space, Table} from 'antd';
-import GetData from "./GetData.jsx";
+import locale from "antd/es/date-picker/locale/en_US.js";
+
+
+const GetData = async () => {
+    const {result} = await (await fetch('http://localhost:3006/auth/getInvitation', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json;charset=utf-8',
+            'Authorization': `Bearer ${localStorage.getItem("accessToken")}`
+        }
+    })).json();
+    return result
+
+}
+
+const DeclineInv = async(email, group) =>{
+    console.log("declinefront")
+    const {result} = await (await fetch('http://localhost:3006/auth/declineInvitation', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json;charset=utf-8',
+            'Authorization': `Bearer ${localStorage.getItem("accessToken")}`
+        }, 
+        body:  JSON.stringify({
+            email,
+            group
+        })
+    })).json();
+
+}
+
+const AcceptInv = async(email, group) =>{
+    console.log("acceptfront")
+    const {result} = await (await fetch('http://localhost:3006/auth/acceptInvitation', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json;charset=utf-8',
+            'Authorization': `Bearer ${localStorage.getItem("accessToken")}`
+        }, 
+        body: JSON.stringify({
+            email,
+            group
+        })
+    })).json();
+
+}
 
 const TableInvitation = () => {
-    const navigate = useNavigate();
-    GetData();
+    let [dataSource, setdataSource] = useState()
+    
+    GetData().then((value) => {setdataSource(value)})
+
+    
     const columns = [
         {
             title: 'Название группы',
-            dataIndex: 'name',
-            key: 'name',
+            dataIndex: 'groupName',
+            key: 'groupName',
         },
         {
-            title: 'Создатель группы',
-            dataIndex: 'author',
-            key: 'author',
-            },
+            title: 'Имя создателя группы',
+            dataIndex: 'name',
+            key: 'name',
         
+        },
+        {
+            title: 'Почта создателя группы',
+            dataIndex: 'email',
+            key: 'email',
+        
+        },
         {
             title: 'Действия',
             key: 'action',
             render: (record) => (
               <Space size="middle">
-                 <Button onClick={() => {acceptdataSource(record.key)}}>Принять</Button>
-                <Button onClick={() => {removedataSource(record.key)}}>Отклонить</Button>
+                 <Button onClick={() => {acceptdataSource(record)}}>Принять</Button>
+                <Button onClick={() => {removedataSource(record)}}>Отклонить</Button>
               </Space>
             ),
         },
     ];
 
 
-    let [dataSource, setdataSource] = useState(
-    //     [
-    //     {
-    //       key: '1',
-    //       name: 'Оригинальное название',
-    //       author: 'myemail@com',
-    //       invMaker: 'myemail@com',
-    //     },
-        
-    //     {
-    //         key: '2',
-    //         name: 'Оригинальное название2.0',
-    //         author: 'myemail@com',
-    //         invMaker: '2myemail@com',
-    //     },
-    // ]
-);
+    
+    
 
-// useEffect = () => {
-//     setdataSource(getData())
-// }
 
 /////////////////////////////funcPost//////////////////////////////////////////
     // Отклонение приглашения
     const removedataSource = (key) => {
-        
-        dataSource = dataSource.filter((e) => e.key !== key)
-        console.log(dataSource);
-        setdataSource(dataSource);
+        console.log(key)
+        DeclineInv(key.email, key.groupName)
+        console.log("end decline")
+        GetData().then((value) => {setdataSource(value)})
+        console.log("end get data")
     }
     
     // Принятие приглашения
     const acceptdataSource = (key) => {
         
-        dataSource = dataSource.filter((e) => e.key !== key)
-        console.log(dataSource);
-        setdataSource(dataSource);
+        AcceptInv(key.email, key.groupName)
+        console.log("end decline")
+        GetData().then((value) => {setdataSource(value)})
+        console.log("end get data")
     }
 ////////////////////////////////////////////////////////////////////// 
-
+   
     return (
         
         <Table dataSource={dataSource} columns={columns} />
